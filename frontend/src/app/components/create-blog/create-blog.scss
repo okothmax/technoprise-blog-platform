@@ -1,0 +1,425 @@
+// Create Blog Component Styles
+.create-blog-container {
+  min-height: calc(100vh - 120px);
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  
+  // Global form field visibility fixes
+  .mat-mdc-form-field {
+    // Force all form fields to be visible
+    .mat-mdc-text-field-wrapper {
+      background: #ffffff !important;
+      border: 2px solid #d1d5db !important;
+      border-radius: 8px !important;
+      
+      // Ensure visibility in all states
+      &.mdc-text-field--filled,
+      &.mdc-text-field--outlined {
+        background: #ffffff !important;
+        
+        .mdc-text-field__input,
+        .mat-mdc-input-element {
+          color: #1e293b !important;
+          opacity: 1 !important;
+        }
+      }
+    }
+    
+    // Override Material Design defaults
+    &.mat-mdc-form-field-appearance-outline {
+      .mat-mdc-text-field-wrapper {
+        background: #ffffff !important;
+      }
+    }
+  }
+  
+  .create-blog-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
+
+// Page Header
+.page-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .page-description {
+    font-size: 1.125rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.6;
+  }
+}
+
+// Form Card
+.blog-form-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e2e8f0;
+  overflow: visible; // Changed from hidden to visible
+  margin-bottom: 2rem;
+  
+  .mat-mdc-card-header {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-bottom: 1px solid #e2e8f0;
+    padding: 2rem;
+    
+    .mat-mdc-card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+    }
+    
+    .mat-mdc-card-subtitle {
+      color: #64748b;
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
+  
+  .mat-mdc-card-content {
+    padding: 2rem;
+  }
+}
+
+// Form Styles
+.blog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  
+  .full-width {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    
+    // Force visibility for all form field states
+    &.mat-mdc-form-field {
+      .mat-mdc-text-field-wrapper {
+        background-color: #ffffff !important;
+        border: 2px solid #d1d5db !important;
+        
+        // Default state - always visible
+        &:not(.mdc-text-field--focused):not(:hover) {
+          background-color: #ffffff !important;
+          border-color: #d1d5db !important;
+        }
+      }
+    }
+    
+    .mat-mdc-text-field-wrapper {
+      background: #ffffff !important;
+      border: 2px solid #d1d5db !important;
+      border-radius: 8px !important;
+      transition: all 0.2s ease;
+      min-height: 56px !important;
+      
+      &:hover {
+        border-color: #9ca3af !important;
+        background: #ffffff !important;
+      }
+      
+      &.mdc-text-field--focused {
+        background: #ffffff !important;
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+      }
+    }
+    
+    .mat-mdc-form-field-infix {
+      padding: 1rem !important;
+      min-height: 40px !important;
+      border: none !important;
+    }
+    
+    // Ensure labels are always visible
+    .mat-mdc-floating-label {
+      color: #6b7280 !important;
+      font-weight: 500 !important;
+      
+      &.mdc-floating-label--float-above {
+        color: #3b82f6 !important;
+      }
+    }
+    
+    // Make sure outline is always visible
+    .mat-mdc-form-field-outline {
+      display: none !important; // Hide default outline since we're using custom border
+    }
+    
+    .mat-mdc-form-field-flex {
+      padding: 1rem;
+    }
+    
+    .mdc-text-field__input,
+    .mat-mdc-input-element {
+      color: #1e293b !important;
+      font-size: 1rem !important;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      padding: 0.5rem 0 !important;
+      width: 100% !important;
+      min-height: 24px !important;
+      
+      &::placeholder {
+        color: #9ca3af !important;
+        opacity: 1 !important;
+        font-size: 1rem !important;
+      }
+      
+      &:focus {
+        outline: none !important;
+        box-shadow: none !important;
+        color: #1e293b !important;
+      }
+      
+      // Ensure text is always visible
+      &:not(:placeholder-shown) {
+        color: #1e293b !important;
+      }
+    }
+    
+    // Textarea specific styling
+    textarea.mat-mdc-input-element,
+    textarea.mdc-text-field__input {
+      min-height: 120px !important;
+      resize: vertical !important;
+      line-height: 1.5 !important;
+      padding: 0.75rem 0 !important;
+    }
+    
+    .mat-mdc-form-field-label {
+      color: #6b7280 !important;
+      font-weight: 500 !important;
+      
+      &.mat-mdc-form-field-label-floating {
+        color: #3b82f6 !important;
+      }
+    }
+    
+    // Override any Material Design defaults that might hide content
+    .mdc-text-field--filled {
+      background-color: #ffffff !important;
+      
+      .mdc-text-field__input {
+        background-color: transparent !important;
+      }
+    }
+    
+    .mdc-text-field--outlined {
+      .mdc-notched-outline {
+        display: none !important; // Use our custom border instead
+      }
+    }
+    
+    // Ensure proper spacing and visibility
+    .mat-mdc-form-field-subscript-wrapper {
+      margin-top: 0.5rem !important;
+    }
+    
+    // Fix hint and error text visibility
+    .mat-mdc-form-field-hint-wrapper,
+    .mat-mdc-form-field-error-wrapper {
+      .mat-mdc-form-field-hint,
+      .mat-mdc-form-field-error {
+        font-size: 0.875rem !important;
+        line-height: 1.4 !important;
+        margin-top: 0.25rem !important;
+      }
+    }
+    
+    .mat-mdc-form-field-hint-wrapper {
+      .mat-mdc-form-field-hint {
+        color: #64748b;
+        font-size: 0.875rem;
+      }
+    }
+    
+    .mat-mdc-form-field-error-wrapper {
+      .mat-mdc-form-field-error {
+        color: #dc2626;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// Form Row for Checkbox
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  
+  .mat-mdc-checkbox {
+    .mdc-checkbox {
+      .mdc-checkbox__checkmark {
+        color: white;
+      }
+      
+      .mdc-checkbox__background {
+        border-color: #3b82f6;
+        
+        &::before {
+          background-color: #3b82f6;
+        }
+      }
+    }
+    
+    .mdc-form-field {
+      color: #1e293b;
+      font-weight: 500;
+    }
+  }
+  
+  .checkbox-hint {
+    color: #64748b;
+    font-size: 0.875rem;
+    margin: 0;
+    margin-left: 2rem;
+    line-height: 1.4;
+  }
+}
+
+// Form Actions
+.form-actions {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  
+  button {
+    min-width: 120px;
+    height: 44px;
+    font-weight: 600;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    
+    mat-icon {
+      font-size: 1.125rem;
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+  }
+  
+  .mat-mdc-button {
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    
+    &:hover:not(:disabled) {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #475569;
+    }
+  }
+  
+  .submit-btn {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+    
+    &:hover:not(:disabled) {
+      background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 8px -1px rgba(59, 130, 246, 0.4);
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: 0 2px 4px -1px rgba(59, 130, 246, 0.2);
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .create-blog-container {
+    padding: 1rem 0.5rem;
+    
+    .page-header {
+      margin-bottom: 1.5rem;
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .page-description {
+        font-size: 1rem;
+      }
+    }
+  }
+  
+  .blog-form-card {
+    border-radius: 12px;
+    
+    .mat-mdc-card-header {
+      padding: 1.5rem;
+      
+      .mat-mdc-card-title {
+        font-size: 1.25rem;
+      }
+    }
+    
+    .mat-mdc-card-content {
+      padding: 1.5rem;
+    }
+  }
+  
+  .form-actions {
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+      min-width: auto;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .create-blog-container {
+    padding: 0.5rem;
+  }
+  
+  .blog-form-card {
+    .mat-mdc-card-header {
+      padding: 1rem;
+    }
+    
+    .mat-mdc-card-content {
+      padding: 1rem;
+    }
+  }
+  
+  .form-actions {
+    padding: 1rem;
+  }
+}
+
+// Success Snackbar Styling
+.success-snackbar {
+  background: #10b981 !important;
+  color: white !important;
+}

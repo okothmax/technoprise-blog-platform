@@ -1,0 +1,156 @@
+<div class="blog-home" role="main" id="main-content">
+
+  <!-- Hero Section -->
+  <section class="hero-section" aria-labelledby="hero-title">
+    <div class="hero-content">
+      <h1 id="hero-title" class="hero-title">
+        TechnoPrise Global Blog
+      </h1>
+      <p class="hero-subtitle">
+        Insights on accessibility, innovation, and inclusive digital experiences
+      </p>
+      
+      <!-- Accessibility Score Display -->
+      <div class="accessibility-score" *ngIf="accessibilityScore()" 
+           [attr.aria-label]="'Accessibility score: ' + accessibilityScore()?.overall + ' out of 100'">
+        <mat-icon aria-hidden="true">accessibility</mat-icon>
+        <span>WCAG {{ accessibilityScore()?.overall }}% Compliant</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Posts Section -->
+  <section class="featured-section" aria-labelledby="featured-title" *ngIf="featuredBlogs().length > 0">
+    <h2 id="featured-title" class="section-title">Featured Articles</h2>
+    <div class="featured-grid" role="list">
+      <article *ngFor="let blog of featuredBlogs(); trackBy: trackByBlogId" 
+               class="featured-card"
+               role="listitem">
+        <mat-card class="blog-card featured-card-content">
+          <mat-card-header>
+            <mat-card-title>
+              <a [routerLink]="['/blog', blog.slug]" 
+                 class="blog-title-link"
+                 [attr.aria-describedby]="'blog-meta-' + blog.id">
+                {{ blog.title }}
+              </a>
+            </mat-card-title>
+            <mat-card-subtitle id="{{ 'blog-meta-' + blog.id }}">
+              By {{ blog.author }} • {{ formatDate(blog.created_at) }} • {{ formatReadingTime(blog.reading_time) }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <p class="blog-excerpt">{{ blog.excerpt }}</p>
+            
+            <div class="blog-tags" *ngIf="blog.tags.length > 0">
+              <mat-chip-set aria-label="Article tags">
+                <mat-chip *ngFor="let tag of blog.tags.slice(0, 3)" 
+                         [attr.aria-label]="'Tag: ' + tag">
+                  {{ tag }}
+                </mat-chip>
+              </mat-chip-set>
+            </div>
+          </mat-card-content>
+          
+          <mat-card-actions>
+            <a mat-button 
+               [routerLink]="['/blog', blog.slug]"
+               [attr.aria-label]="'Read full article: ' + blog.title">
+              Read More
+              <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+            </a>
+          </mat-card-actions>
+        </mat-card>
+      </article>
+    </div>
+  </section>
+
+
+  
+  <!-- Blog Posts Section -->
+  <section class="posts-section" aria-labelledby="posts-title">
+    <h2 id="posts-title" class="section-title">
+      {{ searchQuery() ? 'Search Results' : 'Latest Articles' }}
+    </h2>
+    
+    <!-- Loading State -->
+    <div *ngIf="loading()" class="loading-container" role="status" aria-live="polite">
+      <mat-spinner diameter="40"></mat-spinner>
+      <span class="loading-text">Loading articles...</span>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error()" class="error-container" role="alert" aria-live="assertive">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error() }}</p>
+      <button mat-button (click)="retryLoad()" aria-label="Retry loading articles">
+        Try Again
+      </button>
+    </div>
+
+    <!-- Blog Posts Grid -->
+    <div *ngIf="!loading() && !error() && blogResponse()" class="posts-grid" role="list">
+      <article *ngFor="let blog of blogResponse()?.blogs; trackBy: trackByBlogId" 
+               class="post-card"
+               role="listitem">
+        <mat-card class="blog-card">
+          <mat-card-header>
+            <mat-card-title>
+              <a [routerLink]="['/blog', blog.slug]" 
+                 class="blog-title-link"
+                 [attr.aria-describedby]="'blog-meta-' + blog.id">
+                {{ blog.title }}
+              </a>
+            </mat-card-title>
+            <mat-card-subtitle id="{{ 'blog-meta-' + blog.id }}">
+              By {{ blog.author }} • {{ formatDate(blog.created_at) }} • {{ formatReadingTime(blog.reading_time) }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <p class="blog-excerpt">{{ blog.excerpt }}</p>
+            
+            <div class="blog-tags" *ngIf="blog.tags.length > 0">
+              <mat-chip-set aria-label="Article tags">
+                <mat-chip *ngFor="let tag of blog.tags.slice(0, 3)" 
+                         [attr.aria-label]="'Tag: ' + tag">
+                  {{ tag }}
+                </mat-chip>
+              </mat-chip-set>
+            </div>
+          </mat-card-content>
+          
+          <mat-card-actions>
+            <a mat-button 
+               [routerLink]="['/blog', blog.slug]"
+               [attr.aria-label]="'Read full article: ' + blog.title">
+              Read More
+              <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+            </a>
+          </mat-card-actions>
+        </mat-card>
+      </article>
+    </div>
+
+    <!-- No Results -->
+    <div *ngIf="!loading() && !error() && (blogResponse()?.blogs?.length ?? 0) === 0" 
+         class="no-results" role="status">
+      <mat-icon>search_off</mat-icon>
+      <h3>No articles found</h3>
+      <p *ngIf="searchQuery()">Try different keywords or browse all articles.</p>
+      <p *ngIf="!searchQuery()">No articles available at the moment.</p>
+    </div>
+
+    <!-- Pagination -->
+    <mat-paginator *ngIf="blogResponse() && blogResponse()!.total > 0"
+                   [length]="blogResponse()!.total"
+                   [pageSize]="pageSize()"
+                   [pageSizeOptions]="[5, 10, 20, 50]"
+                   [pageIndex]="currentPage() - 1"
+                   (page)="onPageChange($event)"
+                   aria-label="Blog posts pagination"
+                   showFirstLastButtons>
+    </mat-paginator>
+  </section>
+</div>

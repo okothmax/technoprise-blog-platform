@@ -1,0 +1,220 @@
+<div class="create-blog-container" [attr.aria-busy]="isSubmitting()" [attr.aria-live]="isSubmitting() ? 'polite' : 'off'">
+  <div class="create-blog-content">
+    <!-- Header -->
+    <div class="page-header">
+      <h1>Create New Blog Post</h1>
+      <p class="page-description">Share your insights and expertise with the TechnoPrise Global community</p>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage()" class="error-message" role="alert" aria-live="assertive">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ errorMessage() }}</span>
+    </div>
+
+    <!-- Form Card -->
+    <mat-card class="blog-form-card">
+      <mat-card-header>
+        <mat-card-title>Blog Post Details</mat-card-title>
+        <mat-card-subtitle>Fill in the information below to create your blog post</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="blogForm" (ngSubmit)="onSubmit()" class="blog-form">
+          <!-- Title Field -->
+          <mat-form-field appearance="outline" class="full-width" floatLabel="always">
+            <mat-label>Blog Title *</mat-label>
+            <input matInput 
+                   formControlName="title" 
+                   [placeholder]="blogForm.get('title')?.value ? '' : 'Enter an engaging title for your blog post'"
+                   maxlength="255"
+                   required
+                   aria-required="true"
+                   aria-describedby="title-hint title-error">
+            <mat-hint id="title-hint">A compelling title helps readers understand what your post is about (5-255 characters)</mat-hint>
+            <mat-error id="title-error">
+              <span *ngIf="blogForm.get('title')?.hasError('required')">Title is required</span>
+              <span *ngIf="blogForm.get('title')?.hasError('minlength')">Title must be at least 5 characters</span>
+              <span *ngIf="blogForm.get('title')?.hasError('maxlength')">Title cannot exceed 255 characters</span>
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Author Field -->
+          <mat-form-field appearance="outline" class="full-width" floatLabel="always">
+            <mat-label>Author Name *</mat-label>
+            <input matInput 
+                   formControlName="author" 
+                   [placeholder]="blogForm.get('author')?.value ? '' : 'Enter your name'"
+                   maxlength="100"
+                   required
+                   aria-required="true"
+                   aria-describedby="author-hint author-error">
+            <mat-hint id="author-hint">Your name as it should appear on the blog post</mat-hint>
+            <mat-error id="author-error">
+              <span *ngIf="blogForm.get('author')?.hasError('required')">Author name is required</span>
+              <span *ngIf="blogForm.get('author')?.hasError('maxlength')">Author name cannot exceed 100 characters</span>
+            </mat-error>
+          </mat-form-field>
+
+          <!-- SEO Section -->
+          <mat-expansion-panel class="seo-section" [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon class="mr-2">search</mat-icon>
+                SEO Settings
+              </mat-panel-title>
+              <mat-panel-description>
+                Customize how your post appears in search results
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <!-- Meta Title Field -->
+            <mat-form-field appearance="outline" class="full-width" floatLabel="always">
+              <mat-label>Meta Title</mat-label>
+              <input matInput 
+                     formControlName="meta_title" 
+                     [placeholder]="blogForm.get('meta_title')?.value ? '' : 'Enter a meta title for SEO'"
+                     maxlength="70"
+                     aria-describedby="meta-title-hint">
+              <mat-hint id="meta-title-hint">
+                Title for search engine results (recommended: 50-60 characters)
+                <span class="char-count" *ngIf="blogForm.get('meta_title')?.value">
+                  {{ blogForm.get('meta_title')?.value?.length }}/70
+                </span>
+              </mat-hint>
+              <mat-error *ngIf="blogForm.get('meta_title')?.hasError('maxlength')">
+                Meta title cannot exceed 70 characters
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Meta Description Field -->
+            <mat-form-field appearance="outline" class="full-width" floatLabel="always">
+              <mat-label>Meta Description</mat-label>
+              <textarea matInput 
+                        formControlName="meta_description" 
+                        rows="2"
+                        [placeholder]="blogForm.get('meta_description')?.value ? '' : 'Enter a meta description for SEO'"
+                        maxlength="320"
+                        aria-describedby="meta-desc-hint"></textarea>
+              <mat-hint id="meta-desc-hint">
+                Brief description for search engine results (recommended: 150-160 characters)
+                <span class="char-count" *ngIf="blogForm.get('meta_description')?.value">
+                  {{ blogForm.get('meta_description')?.value?.length }}/320
+                </span>
+              </mat-hint>
+              <mat-error *ngIf="blogForm.get('meta_description')?.hasError('maxlength')">
+                Meta description cannot exceed 320 characters
+              </mat-error>
+            </mat-form-field>
+          </mat-expansion-panel>
+
+          <!-- Excerpt Field -->
+          <mat-form-field appearance="outline" class="full-width" floatLabel="always">
+            <mat-label>Excerpt</mat-label>
+            <textarea matInput 
+                      formControlName="excerpt" 
+                      rows="3"
+                      [placeholder]="blogForm.get('excerpt')?.value ? '' : 'Write a brief summary of your blog post'"
+                      maxlength="500"
+                      aria-describedby="excerpt-hint excerpt-error"></textarea>
+            <mat-hint id="excerpt-hint">
+              A short summary that appears in blog listings and search results (optional, 20-500 characters)
+              <span class="char-count" *ngIf="blogForm.get('excerpt')?.value">
+                {{ blogForm.get('excerpt')?.value.length }}/500
+              </span>
+            </mat-hint>
+            <mat-error id="excerpt-error">
+              <span *ngIf="blogForm.get('excerpt')?.hasError('minlength')">Excerpt must be at least 20 characters</span>
+              <span *ngIf="blogForm.get('excerpt')?.hasError('maxlength')">Excerpt cannot exceed 500 characters</span>
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Content Field -->
+          <mat-form-field appearance="outline" class="full-width" floatLabel="always">
+            <mat-label>Content *</mat-label>
+            <textarea matInput 
+                      formControlName="content" 
+                      rows="12"
+                      [placeholder]="blogForm.get('content')?.value ? '' : 'Write your blog post content here...'"
+                      required
+                      aria-required="true"
+                      aria-describedby="content-hint content-error"></textarea>
+            <mat-hint id="content-hint">
+              Share your knowledge, insights, and expertise. Use clear headings and paragraphs for better readability.
+              <span class="char-count" *ngIf="blogForm.get('content')?.value">
+                {{ blogForm.get('content')?.value.length }} characters
+              </span>
+            </mat-hint>
+            <mat-error id="content-error">
+              <span *ngIf="blogForm.get('content')?.hasError('required')">Content is required</span>
+              <span *ngIf="blogForm.get('content')?.hasError('minlength')">Content must be at least 10 characters</span>
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Tags Field -->
+          <mat-form-field appearance="outline" class="full-width" floatLabel="always">
+            <mat-label>Tags</mat-label>
+            <mat-chip-grid #chipGrid formControlName="tags" aria-label="Add tags" class="tags-grid">
+              <mat-chip-row *ngFor="let tag of blogForm.get('tags')?.value" 
+                          [removable]="true"
+                          (removed)="removeTag(tag)">
+                {{ tag }}
+                <button matChipRemove [attr.aria-label]="'Remove ' + tag">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip-row>
+              <input 
+                #tagInput 
+                [matChipInputFor]="chipGrid" 
+                [matChipInputSeparatorKeyCodes]="[ENTER, COMMA, SEMI_COLON]"
+                (matChipInputTokenEnd)="addTag($event)"
+                [placeholder]="(blogForm.get('tags')?.value?.length || 0) ? '' : 'Add tags...'"
+                maxlength="50"
+                aria-label="Enter tags separated by comma or semicolon">
+            </mat-chip-grid>
+            <mat-hint>
+              Add up to 10 relevant tags to help readers find your post (optional)
+              <span class="char-count" *ngIf="blogForm.get('tags')?.value?.length">
+                {{ blogForm.get('tags')?.value?.length || 0 }}/10 tags
+              </span>
+            </mat-hint>
+            <mat-error *ngIf="blogForm.get('tags')?.hasError('maxlength')">
+              Maximum 10 tags allowed
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Featured Toggle -->
+          <div class="form-row">
+            <mat-checkbox formControlName="featured" 
+                          aria-describedby="featured-hint">
+              Mark as Featured Post
+            </mat-checkbox>
+            <p id="featured-hint" class="checkbox-hint">Featured posts appear prominently on the homepage</p>
+          </div>
+        </form>
+      </mat-card-content>
+
+      <mat-card-actions class="form-actions">
+        <button mat-button 
+                type="button" 
+                (click)="onCancel()"
+                [disabled]="isSubmitting()"
+                aria-label="Cancel blog creation and return to home page">
+          <mat-icon>close</mat-icon>
+          Cancel
+        </button>
+        
+        <button mat-raised-button 
+                color="primary"
+                type="submit"
+                (click)="onSubmit()"
+                [disabled]="!blogForm.valid || isSubmitting()"
+                [attr.aria-label]="isSubmitting() ? 'Creating blog post...' : 'Create blog post'"
+                class="submit-btn">
+          <mat-icon>{{ isSubmitting() ? 'hourglass_empty' : 'publish' }}</mat-icon>
+          {{ isSubmitting() ? 'Creating...' : 'Create Post' }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

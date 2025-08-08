@@ -1,0 +1,33 @@
+@use '~@angular/material' as mat;
+
+:host {
+  @apply flex items-center justify-center;
+}
+
+::ng-deep .mat-mdc-dialog-container {
+  @apply rounded-lg shadow-lg;
+}
+
+::ng-deep .mat-mdc-dialog-title {
+  @apply text-xl font-semibold py-4 px-6 border-b;
+}
+
+::ng-deep .mat-mdc-dialog-content {
+  @apply py-6 px-6;
+}
+
+::ng-deep .mat-mdc-dialog-actions {
+  @apply flex justify-end gap-4 px-6 py-4 border-t;
+}
+
+button {
+  @apply px-4 py-2 rounded-md transition-colors duration-200;
+}
+
+button[mat-dialog-close="true"] {
+  @apply text-red-600 hover:text-red-700;
+}
+
+button[mat-dialog-close="false"] {
+  @apply text-gray-600 hover:text-gray-800;
+}

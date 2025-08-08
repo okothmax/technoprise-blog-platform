@@ -1,0 +1,203 @@
+<!-- TechnoPrise Global Blog - Accessibility-First Platform -->
+<div class="app-container" [class.high-contrast]="accessibilityService.getCurrentSettings().highContrast">
+  <!-- Skip Navigation Links -->
+  <nav class="skip-navigation" aria-label="Skip navigation">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a href="#navigation" class="skip-link">Skip to navigation</a>
+  </nav>
+
+  <!-- Main Application Header -->
+  <header class="app-header" role="banner">
+    <mat-toolbar class="toolbar">
+      <div class="toolbar-content">
+        <div class="brand">
+          <a routerLink="/" class="brand-link" aria-label="TechnoPrise Global Blog Home">
+            <mat-icon class="brand-icon" aria-hidden="true">accessibility</mat-icon>
+            <span class="brand-text">{{ title }}</span>
+          </a>
+        </div>
+        
+        <nav id="navigation" class="main-nav" aria-label="Main navigation">
+          <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <mat-icon aria-hidden="true">home</mat-icon>
+            Home
+          </a>
+        </nav>
+        
+        <!-- Search Bar in Header -->
+        <div class="header-search">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Search blogs...</mat-label>
+            <input matInput 
+                   type="text" 
+                   [value]="searchQuery()" 
+                   (input)="onSearchInput($event)"
+                   placeholder="Search articles..."
+                   aria-label="Search blog articles">
+            <mat-icon matPrefix>search</mat-icon>
+          </mat-form-field>
+        </div>
+        
+        <!-- Create Blog Button -->
+        <div class="header-actions">
+          <button mat-raised-button 
+                  color="primary"
+                  class="create-blog-btn"
+                  (click)="navigateToCreateBlog()"
+                  aria-label="Create new blog post">
+            <mat-icon>add</mat-icon>
+            Create Blog Post
+          </button>
+        </div>
+        
+        <div class="accessibility-controls">
+          <button mat-icon-button 
+                  [matMenuTriggerFor]="accessibilityMenu"
+                  aria-label="Accessibility settings"
+                  matTooltip="Accessibility Settings">
+            <mat-icon>settings_accessibility</mat-icon>
+          </button>
+          
+          <mat-menu #accessibilityMenu="matMenu" class="accessibility-menu">
+            <div class="menu-header">
+              <h3>Accessibility Settings</h3>
+            </div>
+            <button mat-menu-item (click)="toggleHighContrast()">
+              <mat-icon>contrast</mat-icon>
+              <span>High Contrast</span>
+            </button>
+            <button mat-menu-item (click)="toggleReducedMotion()">
+              <mat-icon>motion_photos_off</mat-icon>
+              <span>Reduced Motion</span>
+            </button>
+            <button mat-menu-item (click)="increaseFontSize()">
+              <mat-icon>text_increase</mat-icon>
+              <span>Increase Font Size</span>
+            </button>
+            <button mat-menu-item (click)="decreaseFontSize()">
+              <mat-icon>text_decrease</mat-icon>
+              <span>Decrease Font Size</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+    </mat-toolbar>
+  </header>
+
+  <!-- Main Content Area -->
+  <main id="main-content" class="main-content" role="main">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Application Footer -->
+  <footer class="app-footer" role="contentinfo">
+    <div class="footer-wave"></div>
+    <div class="footer-gradient">
+      <div class="footer-content">
+        <!-- Main Footer Sections -->
+        <div class="footer-grid">
+          <!-- Company Info -->
+          <div class="footer-section company-info">
+            <div class="footer-logo">
+              <mat-icon class="logo-icon">rocket_launch</mat-icon>
+              <span class="logo-text">TechnoPrise</span>
+            </div>
+            <p class="company-description">Pioneering the future of accessible technology through innovation and inclusive design.</p>
+            <div class="social-links">
+              <a href="https://twitter.com/technoprise" target="_blank" rel="noopener" aria-label="Twitter">
+                <mat-icon>twitter</mat-icon>
+              </a>
+              <a href="https://linkedin.com/company/technoprise" target="_blank" rel="noopener" aria-label="LinkedIn">
+                <mat-icon>linkedin</mat-icon>
+              </a>
+              <a href="https://github.com/technoprise" target="_blank" rel="noopener" aria-label="GitHub">
+                <mat-icon>code</mat-icon>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Quick Links -->
+          <div class="footer-section">
+            <h4 class="footer-heading">Quick Links</h4>
+            <ul class="footer-links">
+              <li><a routerLink="/" class="footer-link"><mat-icon>chevron_right</mat-icon>Home</a></li>
+              <li><a href="https://technopriseglobal.com/blog" target="_blank" rel="noopener" class="footer-link"><mat-icon>chevron_right</mat-icon>Blog</a></li>
+              <li><a href="https://technopriseglobal.com/careers" target="_blank" rel="noopener" class="footer-link"><mat-icon>chevron_right</mat-icon>Careers</a></li>
+              <li><a href="https://technopriseglobal.com/privacy" target="_blank" rel="noopener" class="footer-link"><mat-icon>chevron_right</mat-icon>Privacy Policy</a></li>
+            </ul>
+          </div>
+          
+          <!-- Resources -->
+          <div class="footer-section">
+            <h4 class="footer-heading">Resources</h4>
+            <ul class="footer-links">
+              <li><a href="https://technopriseglobal.com/accessibility" target="_blank" rel="noopener" class="footer-link"><mat-icon>accessibility_new</mat-icon>Accessibility</a></li>
+              <li><a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener" class="footer-link"><mat-icon>article</mat-icon>WCAG Guidelines</a></li>
+              <li><a href="https://technopriseglobal.com/docs" target="_blank" rel="noopener" class="footer-link"><mat-icon>description</mat-icon>Documentation</a></li>
+              <li><a href="https://technopriseglobal.com/api" target="_blank" rel="noopener" class="footer-link"><mat-icon>api</mat-icon>API Reference</a></li>
+            </ul>
+          </div>
+          
+          <!-- Contact -->
+          <div class="footer-section contact-info">
+            <h4 class="footer-heading">Get In Touch</h4>
+            <ul class="contact-links">
+              <li class="contact-item">
+                <mat-icon class="contact-icon">email</mat-icon>
+                <a href="mailto:hello@technopriseglobal.com" class="footer-link">hello@technopriseglobal.com</a>
+              </li>
+              <li class="contact-item">
+                <mat-icon class="contact-icon">support_agent</mat-icon>
+                <a href="mailto:support@technopriseglobal.com" class="footer-link">support@technopriseglobal.com</a>
+              </li>
+              <li class="contact-item">
+                <mat-icon class="contact-icon">location_on</mat-icon>
+                <span>San Francisco, CA</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Newsletter -->
+        <div class="newsletter-section">
+          <h4 class="newsletter-title">Stay Updated</h4>
+          <p class="newsletter-description">Subscribe to our newsletter for the latest updates and insights.</p>
+          <form class="newsletter-form">
+            <mat-form-field appearance="outline" class="newsletter-input">
+              <mat-label>Your email address</mat-label>
+              <input matInput type="email" placeholder="email@example.com" required>
+              <button mat-icon-button matSuffix type="submit" aria-label="Subscribe">
+                <mat-icon>send</mat-icon>
+              </button>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      
+      <!-- Bottom Bar -->
+      <div class="footer-bottom">
+        <div class="footer-bottom-content">
+          <p class="copyright">&copy; 2025 TechnoPrise Global. All rights reserved.</p>
+          
+          <div class="footer-legal">
+            <a href="https://technopriseglobal.com/terms" target="_blank" rel="noopener" class="legal-link">Terms of Service</a>
+            <span class="divider">•</span>
+            <a href="https://technopriseglobal.com/privacy" target="_blank" rel="noopener" class="legal-link">Privacy Policy</a>
+            <span class="divider">•</span>
+            <a href="https://technopriseglobal.com/cookies" target="_blank" rel="noopener" class="legal-link">Cookie Policy</a>
+          </div>
+          
+          <div class="accessibility-badge">
+            <mat-icon class="verified-icon" aria-hidden="true">verified</mat-icon>
+            <span>WCAG 2.2 AA Compliant</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Live Region for Accessibility Announcements -->
+  <div aria-live="polite" aria-atomic="true" class="sr-only" id="accessibility-announcements">
+    {{ accessibilityService.getCurrentAnnouncement() }}
+  </div>
+</div>

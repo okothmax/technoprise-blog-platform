@@ -1,0 +1,136 @@
+<div class="blog-post-container" role="main" id="main-content">
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="loading-container" role="status" aria-live="polite">
+    <mat-spinner diameter="40"></mat-spinner>
+    <span class="loading-text">Loading article...</span>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error()" class="error-container" role="alert" aria-live="assertive">
+    <mat-icon color="warn">error</mat-icon>
+    <h1>Article Not Found</h1>
+    <p>{{ error() }}</p>
+    <div class="error-actions">
+      <button mat-raised-button color="primary" (click)="goBack()" aria-label="Go back to blog home">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Blog
+      </button>
+      <button mat-button (click)="retryLoad()" aria-label="Retry loading article">
+        Try Again
+      </button>
+    </div>
+  </div>
+
+  <!-- Blog Post Content -->
+  <article *ngIf="!loading() && !error() && blog()" class="blog-post">
+    <!-- Navigation Bar -->
+    <nav class="post-navigation" aria-label="Article navigation">
+      <button mat-button (click)="goBack()" class="back-button" aria-label="Go back to blog home">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Blog
+      </button>
+      
+      <div class="post-actions">
+        <button mat-icon-button 
+                (click)="toggleHighContrast()" 
+                [attr.aria-label]="highContrast() ? 'Disable high contrast' : 'Enable high contrast'"
+                matTooltip="Toggle high contrast">
+          <mat-icon>{{ highContrast() ? 'contrast' : 'contrast_off' }}</mat-icon>
+        </button>
+        
+        <button mat-icon-button 
+                (click)="increaseFontSize()" 
+                aria-label="Increase font size"
+                matTooltip="Increase font size">
+          <mat-icon>text_increase</mat-icon>
+        </button>
+        
+        <button mat-icon-button 
+                (click)="decreaseFontSize()" 
+                aria-label="Decrease font size"
+                matTooltip="Decrease font size">
+          <mat-icon>text_decrease</mat-icon>
+        </button>
+        
+        <button mat-icon-button 
+                (click)="readAloud()" 
+                [attr.aria-label]="isReading() ? 'Stop reading' : 'Read article aloud'"
+                matTooltip="Read aloud">
+          <mat-icon>{{ isReading() ? 'stop' : 'volume_up' }}</mat-icon>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Article Header -->
+    <header class="post-header">
+      <div class="post-meta">
+        <span class="post-author" [attr.aria-label]="'Author: ' + blog()!.author">
+          <mat-icon aria-hidden="true">person</mat-icon>
+          {{ blog()!.author }}
+        </span>
+        
+        <span class="post-date" [attr.aria-label]="'Published on ' + formatDate(blog()!.published_at || blog()!.created_at)">
+          <mat-icon aria-hidden="true">calendar_today</mat-icon>
+          {{ formatDate(blog()!.published_at || blog()!.created_at) }}
+        </span>
+        
+        <span class="post-reading-time" [attr.aria-label]="formatReadingTime(blog()!.reading_time)">
+          <mat-icon aria-hidden="true">schedule</mat-icon>
+          {{ formatReadingTime(blog()!.reading_time) }}
+        </span>
+        
+        <span class="post-views" [attr.aria-label]="blog()!.view_count + ' views'">
+          <mat-icon aria-hidden="true">visibility</mat-icon>
+          {{ blog()!.view_count }} views
+        </span>
+      </div>
+
+      <h1 class="post-title">{{ blog()!.title }}</h1>
+      
+      <p class="post-excerpt" *ngIf="blog()!.excerpt">
+        {{ blog()!.excerpt }}
+      </p>
+
+      <!-- Tags -->
+      <div class="post-tags" *ngIf="blog()!.tags && blog()!.tags.length > 0" aria-label="Article tags">
+        <mat-chip-set aria-label="Tags">
+          <mat-chip *ngFor="let tag of blog()!.tags" [attr.aria-label]="'Tag: ' + tag">
+            <mat-icon matChipAvatar>tag</mat-icon>
+            {{ tag }}
+          </mat-chip>
+        </mat-chip-set>
+      </div>
+
+      <!-- Accessibility Score -->
+      <div class="accessibility-score" *ngIf="accessibilityScore() > 0" role="status" aria-live="polite">
+        <mat-icon [style.color]="accessibilityScore() >= 90 ? '#4caf50' : accessibilityScore() >= 70 ? '#ff9800' : '#f44336'">
+          accessibility
+        </mat-icon>
+        <span>Accessibility Score: {{ accessibilityScore() }}%</span>
+      </div>
+    </header>
+
+    <!-- Article Content -->
+    <div class="post-content" [innerHTML]="blog()!.content" role="main" tabindex="0"></div>
+
+    <!-- Article Footer -->
+    <footer class="post-footer">
+      <div class="post-actions-footer">
+        <button mat-raised-button color="primary" (click)="shareArticle()" aria-label="Share this article">
+          <mat-icon>share</mat-icon>
+          Share Article
+        </button>
+        
+        <button mat-button (click)="goBack()" aria-label="Go back to blog home">
+          <mat-icon>arrow_back</mat-icon>
+          Back to Blog
+        </button>
+      </div>
+      
+      <div class="post-meta-footer">
+        <p>Published by <strong>{{ blog()!.author }}</strong> on {{ formatDate(blog()!.published_at || blog()!.created_at) }}</p>
+        <p *ngIf="blog()!.view_count > 0">This article has been viewed {{ blog()!.view_count }} times</p>
+      </div>
+    </footer>
+  </article>
+</div>
